@@ -72,9 +72,10 @@ function getNewToken(oAuth2Client, callback) {
  * @param {google.auth.OAuth2} auth The authenticated Google OAuth 2.0 client.
  */
 function printDocTitle(auth) {
+  q_param="'0Bya_X1cZJP9TfjZ6dE9nOWE5cF9Ic1k2ZVlsMnE1anc5S0xWNzFhSTI5eHZEWkN1cjQzNVE' in parents";
   const drive = google.drive({version: 'v3', auth});
   drive.files.list({
-    pageSize: 5,
+    q: q_param,
     fields: 'nextPageToken, files(id, name)',
   }, (err, res) => {
     if (err) return console.log('The API returned an error: ' + err);
@@ -98,7 +99,7 @@ function printDocTitle(auth) {
   });
 
   drive.revisions.list({
-      fileId: "1RA9xgl1fWwXBaDHPdscdiKVSWDNzCMfUp1dkFkx9LXA"
+      fileId: "15vHo8kDqjQTaCFY0c4Im86zu2aDnj3wcaUT8eevXSgc"
   }).then(function(response) {
     // Handle the results here (response.result has the parsed body).
     console.log("Revisions of file:")
