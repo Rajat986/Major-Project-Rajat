@@ -72,25 +72,37 @@ function getNewToken(oAuth2Client, callback) {
  * @param {google.auth.OAuth2} auth The authenticated Google OAuth 2.0 client.
  */
 function printDocTitle(auth) {
-  q_param="'0Bya_X1cZJP9TfjZ6dE9nOWE5cF9Ic1k2ZVlsMnE1anc5S0xWNzFhSTI5eHZEWkN1cjQzNVE' in parents";
+  stu_email="'eng19cs0015.adityabelludi@gmail.com' in writers";
+  stu_identify="name contains 'ADITYA BELLUDI'";
+
+  /*act_1_drive="'0Bya_X1cZJP9TfjZ6dE9nOWE5cF9Ic1k2ZVlsMnE1anc5S0xWNzFhSTI5eHZEWkN1cjQzNVE' in parents";
+  act_2_drive="'0Bya_X1cZJP9TfklWRDRncXJhRVc3cV9lSXdPRkcwZWpqa1JtN1I4V2RDWEp3bGgwcnJCcXc' in parents";
+  act_8_drive="'0Bya_X1cZJP9Tfk1aN2R0aU45ZWVJX256SUE2Q25sWmJQcEJZZS1vNmVvRy04OVFWZ2YzbTQ' in parents";
+  act_1=(act_1_drive+" and "+stu_email);
+  act_2=(act_2_drive+" and "+stu_email);
+  act_8=(act_8_drive+" and "+stu_email);*/
+
   const drive = google.drive({version: 'v3', auth});
   drive.files.list({
-    q: q_param,
+    pageSize: 1000,
+    supportsAllDrives: true,
+    q: stu_identify,
     fields: 'nextPageToken, files(id, name)',
   }, (err, res) => {
     if (err) return console.log('The API returned an error: ' + err);
     const files = res.data.files;
+    const nPT = res.data.nextPageToken;
     if (files.length) {
       console.log('Files:');
-      files.map((file) => {
-        console.log(`${file.name} (${file.id})`);
+      files.map((file, nPT) => {
+        console.log(`${nPT+1}  ${file.name} (${file.id})`);
       });
     } else {
       console.log('No files found.');
     }
   });
 
-  const docs = google.docs({version: 'v1', auth});
+  /*const docs = google.docs({version: 'v1', auth});
   docs.documents.get({
     'documentId': '1yHeuvBMz7ev3qaOFGjl9hgkLln3Dx_ZlG4eaBe9dGOg',
   }, (err, res) => {
@@ -105,5 +117,5 @@ function printDocTitle(auth) {
     console.log("Revisions of file:")
     console.log(response.data);
   },
-  function(err) { console.error("Execute error", err); });
+  function(err) { console.error("Execute error", err); });*/
 }
