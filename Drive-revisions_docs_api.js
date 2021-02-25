@@ -73,7 +73,7 @@ function getNewToken(oAuth2Client, callback) {
  */
 function printDocTitle(auth) {
   stu_email="'eng19cs0015.adityabelludi@gmail.com' in writers";
-  stu_identify="name contains 'ADITYA BELLUDI'";
+  stu_identify="name contains 'ENG19CS0070_ Chandrashekar V'";
 
   /*act_1_drive="'0Bya_X1cZJP9TfjZ6dE9nOWE5cF9Ic1k2ZVlsMnE1anc5S0xWNzFhSTI5eHZEWkN1cjQzNVE' in parents";
   act_2_drive="'0Bya_X1cZJP9TfklWRDRncXJhRVc3cV9lSXdPRkcwZWpqa1JtN1I4V2RDWEp3bGgwcnJCcXc' in parents";
@@ -84,8 +84,6 @@ function printDocTitle(auth) {
 
   const drive = google.drive({version: 'v3', auth});
   drive.files.list({
-    pageSize: 1000,
-    supportsAllDrives: true,
     q: stu_identify,
     fields: 'nextPageToken, files(id, name)',
   }, (err, res) => {
