@@ -72,6 +72,7 @@ function getNewToken(oAuth2Client, callback) {
  * @param {google.auth.OAuth2} auth The authenticated Google OAuth 2.0 client.
  */
 function printDocTitle(auth) {
+  //Lists 10 activities of a student given in 'name'
   stu_email="'eng19cs0015.adityabelludi@gmail.com' in writers";
   stu_identify="name contains 'ENG19CS0070_ Chandrashekar V'";
 
@@ -97,6 +98,24 @@ function printDocTitle(auth) {
       });
     } else {
       console.log('No files found.');
+    }
+  });
+
+
+  //driveactivity.activity
+  const driveactivity=google.driveactivity({version: 'v2', auth});
+  driveactivity.activity.query({
+    requestBody:{
+      itemName:"items/1yHeuvBMz7ev3qaOFGjl9hgkLln3Dx_ZlG4eaBe9dGOg"
+    }
+  }, (err, res) => {
+    if(err) return console.log("The Activity API returned an error: "+err);
+    const act_files=res.data.activities;
+    if(act_files.length) {
+      console.log('Activity file:');
+      act_files.map((act_file) => {
+        console.log(`${act_file.timestamp}`)
+      })
     }
   });
 
