@@ -1,4 +1,5 @@
 const fs = require('fs');
+const util = require('util');
 const readline = require('readline');
 const {google} = require('googleapis');
 
@@ -75,6 +76,8 @@ function printDocTitle(auth) {
   //Lists 10 activities of a student given in 'name'
   stu_email="'eng19cs0015.adityabelludi@gmail.com' in writers";
   stu_identify="name contains 'ENG19CS0070_ Chandrashekar V'";
+  var log_file = fs.createWriteStream(__dirname + '/student_activity.log', {flags : 'w'});
+
 
   /*act_1_drive="'0Bya_X1cZJP9TfjZ6dE9nOWE5cF9Ic1k2ZVlsMnE1anc5S0xWNzFhSTI5eHZEWkN1cjQzNVE' in parents";
   act_2_drive="'0Bya_X1cZJP9TfklWRDRncXJhRVc3cV9lSXdPRkcwZWpqa1JtN1I4V2RDWEp3bGgwcnJCcXc' in parents";
@@ -95,6 +98,7 @@ function printDocTitle(auth) {
       console.log('Files:');
       files.map((file, nPT) => {
         console.log(`${nPT+1}  ${file.name} (${file.id})`);
+        log_file.write(util.format(`${file.id}`)+'\n');
       });
     } else {
       console.log('No files found.');
