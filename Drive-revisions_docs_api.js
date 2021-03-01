@@ -72,7 +72,7 @@ function getNewToken(oAuth2Client, callback) {
  * https://docs.google.com/document/d/195j9eDD3ccgjQRttHhJPymLJUCOUjs-jmwTrekvdjFE/edit
  * @param {google.auth.OAuth2} auth The authenticated Google OAuth 2.0 client.
  */
-function activity_doc_log(auth) {
+function activity_doc_log(auth, callback) {
   //Lists 10 activities of a student given in 'name'
   stu_email="'eng19cs0015.adityabelludi@gmail.com' in writers";
   stu_identify="name contains 'ENG19CS0070_ Chandrashekar V'";
@@ -87,6 +87,7 @@ function activity_doc_log(auth) {
   act_8=(act_8_drive+" and "+stu_email);*/
 
   const drive = google.drive({version: 'v3', auth});
+  const driveactivity=google.driveactivity({version: 'v2', auth});
   drive.files.list({
     q: stu_identify,
     fields: 'nextPageToken, files(id, name)',
@@ -95,19 +96,49 @@ function activity_doc_log(auth) {
     const files = res.data.files;
     const nPT = res.data.nextPageToken;
     if (files.length) {
-      console.log('Files:');
+      console.log('\nFiles:');
       files.map((file, nPT) => {
         console.log(`${nPT+1}  ${file.name} (${file.id})`);
+        driveactivity.activity.query({
+          requestBody:{
+            itemName:"items/"+`${file.id}`  
+          }
+        }, (err, res) => {
+          if(err) return console.log("The Activity API returned an error: "+err);
+          var cou=0;
+          var act_date_set=new Set();
+          const act_files=res.data.activities;
+          if(act_files.length) {
+            console.log('\nActivity file (time & date):');
+            act_files.map((act_file) => {
+              console.log(`${act_file.timestamp.split('T')[0]}   ${act_file.timestamp.split('T')[1].split('.')[0]}   ${act_file.timestamp.split('T')[1].split('.')[1]}`);
+              act_date_set.add(`${act_file.timestamp.split('T')[0]}`);
+              /*const targeS=act_file.targets;
+              if(targeS.length){
+                targeS.map((targe_file) => {
+                  console.log(`${targe_file.driveItem}`)
+                })
+              }*/
+              cou=cou+1
+            })
+          }
+          console.log("Timestamp count: "+cou);
+          console.log(`Days worked for "${file.name}": `+act_date_set.size);
+          console.log("Days are: ");
+          act_date_set.forEach(function(value) {
+            console.log(value);
+          })
+        });
         log_file.write(util.format(`${file.id}`)+'\n');
       });
     } else {
       console.log('No files found.');
     }
   });
-  drive_activity(auth);
+  //drive_activity(auth);
 }
 
-function drive_activity(auth){
+/*function drive_activity(auth){
   //driveactivity.activity
   const driveactivity=google.driveactivity({version: 'v2', auth});
   driveactivity.activity.query({
@@ -130,7 +161,7 @@ function drive_activity(auth){
             console.log(`${targe_file.driveItem}`)
           })
         }*/
-        cou=cou+1
+        /*cou=cou+1
       })
     }
     console.log("Timestamp count: "+cou);
@@ -140,8 +171,9 @@ function drive_activity(auth){
       console.log(value);
     })
   });
+  
 
-}
+}*/
 
 function readdataa()
 {
