@@ -105,8 +105,29 @@ async function activity_doc_log(auth, callback) {
     owners.map((owner)=>{
       //if(`${owner.emailAddress}` == email)
       {
-        console.log(`${owner.emailAddress} [${file.name}] (${file.id})`);
-        log_file.write(util.format(`${owner.emailAddress} [${file.name}] (${file.id})`+ '\n'));
+        driveactivity.activity.query({
+          requestBody:{
+            itemName:`items/${file.id}`
+          }
+        },(err, res)=>{
+          if(err) console.log("Activity API returned error: "+err);
+          const activities=res.data.activities;
+          s=`${owner.emailAddress} [${file.name}] (${file.id}) `;
+          if(activities.length) {
+            activities.map((activity) => {
+              //console.log(`${activity.timestamp}`);
+              const targetS=activity.targets;
+              targetS.map((targets)=>{
+                const drive_item=targets.driveItem;
+                s=s+`${activity.timestamp} ${drive_item.owner.user.knownUser.personName} `;
+              })
+            })
+          }
+          console.log(s);
+          log_file.write(util.format(s + '\n'));
+        })
+        //console.log(`${owner.emailAddress} [${file.name}] (${file.id})`);
+        //log_file.write(util.format(`${owner.emailAddress} [${file.name}] (${file.id})`+ '\n'));
       }
     })
   })
