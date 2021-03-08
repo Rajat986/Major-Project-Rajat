@@ -78,7 +78,7 @@ async function activity_doc_log(auth, callback) {
   stu_email="'hithesh9591@gmail.com' in writers";
   email="hithesh9591@gmail.com";
   nameS="Hithesh Kumar N";
-  stu_identify="contains name 'Ujjwal'";
+  stu_identify="name contains 'Ujjwal'";
   var log_file = fs.createWriteStream(__dirname + '/drive_files.txt', {flags : 'w'});
 
   const drive = google.drive({version: 'v3', auth});
@@ -89,6 +89,7 @@ async function activity_doc_log(auth, callback) {
   do{
     const params = {
       //q:stu_email,
+      q:"not 'rsrajat123456789@gmail.com' in writers",
       orderBy: "name",
       pageToken: NextPageToken || "",
       pageSize: 1000,
@@ -113,7 +114,7 @@ async function activity_doc_log(auth, callback) {
           if(err) console.log("Activity API returned error: "+err);
           const activities=res.data.activities;
           s=`${owner.emailAddress} [${file.name}] (${file.id}) `;
-          if(activities.length) {
+          if(activities.length && `${owner.emailAddress}` !== 'rsrajat123456789@gmail.com') {
             activities.map((activity) => {
               //console.log(`${activity.timestamp}`);
               const targetS=activity.targets;
@@ -124,6 +125,7 @@ async function activity_doc_log(auth, callback) {
             })
           }
           console.log(s);
+          console.log();
           log_file.write(util.format(s + '\n'));
         })
         //console.log(`${owner.emailAddress} [${file.name}] (${file.id})`);
