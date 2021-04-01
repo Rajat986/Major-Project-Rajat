@@ -41,7 +41,7 @@ def main():
     else:
         print('Courses:')
         for course in courses:
-            print(course['name']+" "+course['section'])
+            print(course['name']+" "+course['section']+" "+course['id'])
 
 if __name__ == '__main__':
     main()
