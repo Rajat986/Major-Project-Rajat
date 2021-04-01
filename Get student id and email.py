@@ -32,7 +32,7 @@ def main():
             token.write(creds.to_json())
 
     service = build('classroom', 'v1', credentials=creds)
-    result=retrieve_all_files(service)
+    retrieve_all_files(service)
 
 def retrieve_all_files(service):
     result=[]
@@ -46,8 +46,8 @@ def retrieve_all_files(service):
             students = results.get('students', [])
             for student in students:
                 print(student['userId']+" "+student['profile']['emailAddress'])
-            #result.extend(students['userId'])
             page_token=results.get('nextPageToken')
+            
             if not page_token:
                 break
         except errors.HttpError as error:
