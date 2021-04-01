@@ -42,14 +42,15 @@ def retrieve_all_files(service):
             param={}
             if page_token:
                 param['pageToken']=page_token
-            results=service.courses().students().list(**param, courseId='265849904082').execute()
+            results=service.courses().students().list(**param, courseId='266316044397').execute()
             students = results.get('students', [])
             for student in students:
                 print(student['userId']+" "+student['profile']['emailAddress'])
             page_token=results.get('nextPageToken')
-            
+
             if not page_token:
                 break
+            
         except errors.HttpError as error:
             print ('An error occoured +: %s' %error)
             break
