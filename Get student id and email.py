@@ -1,5 +1,6 @@
 from __future__ import print_function
 import os.path
+import csv
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
@@ -35,7 +36,7 @@ def main():
     retrieve_all_files(service)
 
 def retrieve_all_files(service):
-    result=[]
+    students_id_email=[]
     page_token=None
     while True:
         try:
@@ -46,15 +47,21 @@ def retrieve_all_files(service):
             students = results.get('students', [])
             for student in students:
                 print(student['userId']+" "+student['profile']['emailAddress'])
+                student_id_email=[student['userId'],student['profile']['emailAddress']]
+                students_id_email.append(student_id_email)
             page_token=results.get('nextPageToken')
+            print(students_id_email)
 
             if not page_token:
                 break
-            
+
         except errors.HttpError as error:
             print ('An error occoured +: %s' %error)
             break
-    return result
+    
+    with open('student_id_email.csv', 'a') as f:
+                write = csv.writer(f, lineterminator='\n')
+                write.writerows(students_id_email)
     
 if __name__ == '__main__':
     main()
