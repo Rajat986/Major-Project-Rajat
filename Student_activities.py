@@ -1,18 +1,3 @@
-# import csv
-# import sys
-
-# #input number you want to search
-# number = raw_input('Enter number to find\n')
-
-# #read csv, and split on "," the line
-# csv_file = csv.reader(open('test.csv', "r"), delimiter=",")
-
-
-# #loop through the csv list
-# for row in csv_file:
-#     #if current rows 2nd value is equal to input, print that row
-#     if number == row[1]:
-#          print (row)
 import csv
 import re
 def link_student_id(emailId):
@@ -30,10 +15,7 @@ def student_find_activities(emailId):
 
     for row in csv_file_find_activities:
         if student_id in row[0]:
-            #print(re.split(r'$%', row[0]))
-            #print(row[0].split('$%['))
-            q=row[0].replace('$%[',', ').replace(']#@',', ').split(', ')
+            q=row[0].replace('$%[',', ').replace(']#@',', ').split(", ")
             print(q[1])
 
-
-student_find_activities('eng19cs0063.bharatha@gmail.com')
+student_find_activities('eng19cs0030.amoolya@gmail.com')
