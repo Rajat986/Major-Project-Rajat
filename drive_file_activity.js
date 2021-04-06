@@ -94,23 +94,9 @@ async function listFiles(auth) {
 
 function activity_api_call(file_id,auth)
 {
-  const driveactivity=google.driveactivity({version: 'v2', auth});
-  driveactivity.activity.query({
-    requestBody:{
-      itemName:`items/${file_id}`
-    }
-  },(err,res)=>{
     const activities=res.data.activities;
-    if(activities.length)
-    {
-      activities.map((activity)=>{
-        const target_S=activity.targets;
-        target_S.map((targets)=>{
-          const drive_item =targets.driveItem;
-          console.log(`${activity.timestamp}`);
-        })
-      })
-    }
-  })
+    if ('timestamp' in activity) {
+    console.log(activity.timestamp);
+  }
 
 }
