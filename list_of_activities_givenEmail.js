@@ -10,7 +10,7 @@ async function link_student_id(email_ID,callback){
     })
 }
 
-function days_worked(stu_timestamps_people_id,student_ID) {
+function days_worked(stu_timestamps_people_id,student_ID,total_days) {
     days=[];
     stu_timestamp_people_id=stu_timestamps_people_id.split("*&*");
     stu_timestamp_people_id.forEach(element => {
@@ -25,11 +25,14 @@ function days_worked(stu_timestamps_people_id,student_ID) {
     console.log("Days worked: "+days_set.size);
     let days_set_array = [];
     days_set.forEach(v => days_set_array.push(v));
-    console.log("Dates: "+days_set_array+'\n');
+    console.log("Dates: "+days_set_array);
+    total_days=total_days+days_set.size;
+    return total_days;
 }
 
 
 async function student_find_activities(student_ID) {
+    total_days=0;
     console.log("Student ID: "+student_ID+'\n');
     lineReader.eachLine('drive_activity_files.txt', function(line) {
         stu_doc_id=line.split('***')[0];
@@ -38,8 +41,9 @@ async function student_find_activities(student_ID) {
         stu_timestamps_people_id=line.split('***')[3];
         if(line.includes(student_ID)) {
             console.log(stu_doc_name);
-            days_worked(stu_timestamps_people_id,student_ID);
-        } 
+            total_days=days_worked(stu_timestamps_people_id,student_ID,total_days);
+            console.log("Total days worked: "+total_days+'\n');
+        }
     });
 }
 
