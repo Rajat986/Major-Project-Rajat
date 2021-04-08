@@ -85,10 +85,8 @@ async function listFiles(auth) {
   let NextPageToken = "";
   do {
     const params = {
-      orderBy: "name",
       pageToken: NextPageToken || "",
-      pageSize: 1000,
-      q:"not 'rsrajat123456789@gmail.com' in writers",
+      pageSize: 5,
       fields: "nextPageToken, files(id, name, owners)",
     };
     const res = await drive.files.list(params);
