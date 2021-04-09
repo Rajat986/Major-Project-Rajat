@@ -85,8 +85,9 @@ async function listFiles(auth) {
   let NextPageToken = "";
   do {
     const params = {
+      orderBy:"name",
       pageToken: NextPageToken || "",
-      pageSize: 5,
+      pageSize: 300,
       fields: "nextPageToken, files(id, name, owners)",
     };
     const res = await drive.files.list(params);
@@ -94,24 +95,19 @@ async function listFiles(auth) {
     res.data.files.map((file)=>{
       var owners=file.owners;
       owners.map(async (owner)=>{
-        var d=`${file.id}***${owner.emailAddress}***${file.name}***`;
+        //var d=`${file.id}***${owner.emailAddress}***${file.name}***`;
         driveactivity.activity.query({
           requestBody:{
             itemName:`items/${file.id}`
           }
         },(err,res2)=>{
           if(err) console.log("API RETURNED AN ERROR: "+err);
-          const activities=res2.data.activities;
-          if(activities.length) {
-            activities.map((activity)=>{
-              const target_S=activity.targets;
-              target_S.map((targets)=>{
-                d=d+`${activity.timestamp}-${targets.driveItem.owner.user.knownUser.personName}*&*`;
-              })
-            })
-          }
-          console.log(d);
-          drive_activity_file.write(d+'\n');
+                d=`${file.id}***${file.owners.map((owner)=>owner.emailAddress)}***${file.name}***${res2.data.activities.map((activity)=>activity.timestamp)}-${res2.data.activities.map((activity)=>activity.actors.map((actor)=>actor.user.knownUser.personName))}*&*`;
+                drive_activity_file.write(d+'\n');
+                console.log(d);
+          
+          //console.log(d);
+          //drive_activity_file.write(d+'\n');
         })
       })
       
